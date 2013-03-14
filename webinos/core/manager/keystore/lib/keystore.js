@@ -29,7 +29,7 @@ var KeyStore = function () {
                 var  keystore = require("keystore");
                 return keystore;
             } catch (err) {
-                return null;
+                return undefined;
             }
         } else {
             return null;
@@ -39,9 +39,10 @@ var KeyStore = function () {
     function writeFile(id, value, callback) {
         fs.writeFile(path.resolve(path.join(self.metaData.webinosRoot, "keys", id)), value, function(err) {
             if(err) {
-                return callback(false, "failed storing private keys " + err);
+                callback(false);
+                throw {"Component": "KeyStore", "Error": err, "Message": "Failed storing key"};
             } else {
-                return callback(true, value);
+                callback(true, value);
             }
         });
     }
@@ -51,7 +52,7 @@ var KeyStore = function () {
         try{
             if(keystore) {
                 keystore.put(id, value);
-                return callback(true, value);
+                callback(true, value);
             } else {
                 writeFile(id, value, callback);
             }
@@ -64,25 +65,27 @@ var KeyStore = function () {
         var keyPath = path.resolve(path.join(self.metaData.webinosRoot, "keys", id));
         fs.readFile(keyPath, function(err, data) {
             if(err) {
-                return callback(false, "failed fetching keys " + err);
+                callback(false, "failed fetching keys " + err);
+                throw {"Component": "KeyStore", "Error": err, "Message": "Failed fetching key"};
             } else {
-                return callback(true, data.toString());
+                callback(true, data.toString());
             }
         });
     }
 
     this.generateKey = function(type, id, callback) {
         try {
-            var certman = require("certificate_manager");
+            var certManager = require("certificate_manager");
         } catch (err) {
-            return callback(false, "certificate manager is missing, please run npm install to generate it");
+            callback(false, "certificate manager is missing, please run npm install to generate it");
+            throw {"Component": "KeyStore", "Error": err, "Message": "CertificateManager is missing"};
         }
         try {
             var key;
             if (type === "PzhPCA" ||  type === "PzhCA" || type === "PzpCA"){
-                key = certman.genRsaKey(2048);
+                key = certManager.genRsaKey(2048);
             } else {
-                key = certman.genRsaKey(1024);
+                key = certManager.genRsaKey(1024);
             }
             storeKey(id, key, callback);
         } catch(err) {
@@ -92,15 +95,19 @@ var KeyStore = function () {
 
     this.fetchKey = function (id, callback) {
         var key, keystore = checkPlatform();
-        if(keystore) {
-            key = keystore.get(id);
-            if (key.search("-----BEGIN RSA PRIVATE KEY-----") !== -1) {
-                return callback(true, key);
+        try {
+            if(keystore) {
+                key = keystore.get(id);
+                if (key.search("-----BEGIN RSA PRIVATE KEY-----") !== -1) {
+                    callback(true, key);
+                } else {
+                    getKey(id, callback);
+                }
             } else {
-                getKeys(id, callback);
+                getKey(id, callback);
             }
-        } else {
-            getKeys(id, callback);
+        } catch (err) {
+            getKey(id, callback);
         }
     };
 };
