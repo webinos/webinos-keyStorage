@@ -15,13 +15,13 @@
  *
  * Copyright 2011 Habib Virji, Samsung Electronics (UK) Ltd
  *******************************************************************************/
-var KeyStore = function () {
+var KeyStore = function (webinosType, webinosRoot) {
     "use strict";
     var os = require('os');
     var fs = require('fs');
     var path = require('path');
-    var CurrentContext = this; // Include certificate and configuration parameters
-
+    var KeyStoreContext = this; // OwnInstance
+    
     /**
      * KeyStore is supported only on Linux and Mac platform, this function does platform check and if keystore can be
      * loaded
@@ -29,7 +29,7 @@ var KeyStore = function () {
      * @return {Object} returns keystore object or undefined if could not be loaded
      */
     function checkPlatform() {
-        if (CurrentContext.metaData.webinosType ==="Pzp" && (os.type().toLowerCase() ==="linux" &&
+        if (webinosType ==="Pzp" && (os.type().toLowerCase() ==="linux" &&
             os.platform().toLowerCase() !== "android") || os.type().toLowerCase() === "darwin") {
             try {
                 return require("keystore");
@@ -48,9 +48,9 @@ var KeyStore = function () {
      * @param {Function} callback -returns true if data is stored else false
      */
     function writeFile(id, value, callback) {
-        fs.writeFile(path.resolve(path.join(CurrentContext.metaData.webinosRoot, "keys", id)), value, function(err) {
+        fs.writeFile(path.resolve(path.join(webinosRoot, "keys", id)), value, function(err) {
             if(err) {
-                callback(false, {"Component": "KeyStore","Type": "WRITE", "Error": err, "Message": "Failed storing key"});
+                KeyStoreContext.emit("WRITE", "Failed Storing Key", err);
             } else {
                 callback(true, value);
             }
@@ -83,10 +83,11 @@ var KeyStore = function () {
      * @param {Function} callback - true if private key was fetched successful else false
      */
     function getKey(id, callback) {
-        var keyPath = path.resolve(path.join(CurrentContext.metaData.webinosRoot, "keys", id));
+        var keyPath = path.resolve(path.join(webinosRoot, "keys", id));
+        console.log(keyPath);
         fs.readFile(keyPath, function(err, data) {
             if(err) {
-                callback(false, {"Component": "KeyStore", "Type": "READ","Error": err, "Message": "Failed fetching key"});
+                KeyStoreContext.emit("READ", "Failed Fetching Key", err);
             } else {
                 callback(true, data.toString());
             }
@@ -100,11 +101,11 @@ var KeyStore = function () {
      */
     function deleteKeyFile(id, callback){
         try {
-            var keyPath = path.resolve(path.join(CurrentContext.metaData.webinosRoot, "keys", id));
+            var keyPath = path.resolve(path.join(webinosRoot, "keys", id));
             fs.unlinkSync(keyPath);
             callback(true);
         } catch(err){
-            callback(false,{"Component": "KeyStore", Type:"CLEANUP", "Error": err, "Message": "Failed deleting key"});
+            KeyStoreContext.emit("CLEANUP", "Failed Deleting Key", err);
         }
     }
     /**
@@ -117,7 +118,7 @@ var KeyStore = function () {
         try {
             var certManager = require("certificate_manager");
         } catch (err) {
-            callback(false, {"Component": "KeyStore", "Type": "MODULE_MISSING", "Error": err, "Message": "CertificateManager is missing"});
+            KeyStoreContext.emit("MODULE_MISSING", "Certificate Manager is Missing", err);
             return;
         }
         try {
@@ -129,7 +130,7 @@ var KeyStore = function () {
             }
             storeKey(id, key, callback);
         } catch(err) {
-            callback(false ,{"Component": "KeyStore", TYPE:"FUNC_ERROR", "Error": err, "Message": "Private key generation error"});
+            KeyStoreContext.emit("FUNC_ERROR", "Private Key Generation Error", err);
         }
     };
 
@@ -175,4 +176,9 @@ var KeyStore = function () {
     };
 };
 
+KeyStore.prototype.__proto__ = require("events").EventEmitter.prototype;
 module.exports = KeyStore;
+
+process.on("uncaughtException", function(err) {
+    console.log(err);
+});
