@@ -178,7 +178,3 @@ var KeyStore = function (webinosType, webinosRoot) {
 
 KeyStore.prototype.__proto__ = require("events").EventEmitter.prototype;
 module.exports = KeyStore;
-
-process.on("uncaughtException", function(err) {
-    console.log(err);
-});

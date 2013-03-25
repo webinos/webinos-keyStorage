@@ -47,6 +47,9 @@ describe("KeyStore JS tests", function() {
     console.log(WebinosPath.webinosPath());
     var secretKey = "webinosPzp";
     var checkKey;
+    var RSA_START       = "-----BEGIN RSA PRIVATE KEY-----";
+    var RSA_END         = "-----END RSA PRIVATE KEY-----";
+
     it("generate and store key", function() {
         KeyStoreInstance.generateStoreKey("Pzp", secretKey, function(status, key){
             checkKey = key;
@@ -76,36 +79,43 @@ describe("KeyStore JS tests", function() {
 
 // Check exceptions
 describe("KeyStore Exception JS tests", function() {
-    process.on("READ", function(errText, err) {
-        console.log(errText);
-        console.log(err);
+    KeyStoreInstance.on("READ", function(errText, err) {
         expect(errText).not.toBeNull();
         expect(typeof err).toEqual("object");
-        expect(err.Code).toEqual("ENOENT");
-        expect(err.errno).toEqual(34);        
+        expect(err.code).toEqual("EISDIR");
+        expect(err.errno).toEqual(28);
+        expect(errText).toEqual("Failed Fetching Key");
     });
+    KeyStoreInstance.on("WRITE", function(errText, err) {
+        expect(errText).not.toBeNull();
+        expect(typeof err).toEqual("object");
+        expect(err.code).toEqual("EISDIR");
+        expect(err.errno).toEqual(28);
+        expect(errText).toEqual("Failed Storing Key");
+    });
+    KeyStoreInstance.on("CLEANUP", function(errText, err) {
+        expect(errText).not.toBeNull();
+        expect(typeof err).toEqual("object");
+        expect(err.code).toEqual("EISDIR");
+        expect(err.errno).toEqual(28);
+        expect(errText).toEqual("Failed Deleting Key");
+    });
+    KeyStoreInstance.on("FUNC_ERROR", function(errText, err) {
+        expect(errText).not.toBeNull();
+        expect(typeof err).toEqual("object");
+    });
+
     it("check exception while storing generated key", function() {
         KeyStoreInstance.generateStoreKey("Pzp", null, function(statusG, errMsg){           
         });
     });
     it("check exception while fetching key with empty secretKey", function() {
         KeyStoreInstance.fetchKey("", function(statusF, errMsg){
-            expect(statusF).toBeFalsy();
-            expect(errMsg).not.toBeNull();
-            expect(typeof errMsg).toEqual("object");
-            expect(errMsg.Component).toEqual("KeyStore");
-            expect(errMsg.Type).toEqual("READ");
-            expect(errMsg.Message).toEqual("Failed fetching key");
+
         });
     });
     it("check exception while deleting key", function() {
         KeyStoreInstance.deleteKey(undefined, function(statusD, errMsg){
-            expect(statusD).toBeFalsy();
-            expect(errMsg).not.toBeNull();
-            expect(typeof errMsg).toEqual("object");
-            expect(errMsg.Component).toEqual("KeyStore");
-            expect(errMsg.Type).toEqual("CLEANUP");
-            expect(errMsg.Message).toEqual("Failed deleting key");
         });
     });
 });
