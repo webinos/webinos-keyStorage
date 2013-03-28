@@ -1,4 +1,4 @@
-{ "name": "keystore"
+{ "name": "webinos-keyStorage"
 , "description": "An interface to the native password/keystorage interface. Currently works for Linux and Mac OS X"
 , "version": "1"
 , "main": "lib/keystore.js"
