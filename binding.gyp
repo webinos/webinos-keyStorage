@@ -9,14 +9,14 @@
       'target_name': '<(module_name)',
       'product_name':'<(module_name)',
     'sources': [ #Specify your source files here
-      "KeyStoreException.h",
-      "ksImpl.cpp",
-      "ksImpl.h"
+      "src/KeyStoreException.h",
+      "src/ksImpl.cpp",
+      "src/ksImpl.h"
     ],
     'conditions': [
       [ 'OS=="mac"', {
         'sources': [
-        'ksImpl_Darwin.cpp'
+          'src/ksImpl_Darwin.cpp'
         ],
         'libraries': ['-g','-framework CoreFoundation','-framework Security','-lssl','-lcrypto', '-D_GNU_SOURCE'],
         'cflags!': [ '-fno-exceptions' ],
@@ -25,12 +25,12 @@
       }],
       [ 'OS=="win"', {
         'sources': [
-        'ksImpl_NotImplemented.cpp'
+          'src/ksImpl_NotImplemented.cpp'
         ]
       }],
       [ 'OS=="linux"', {
         'sources': [
-        'ksImpl_Linux.cpp'
+          'src/ksImpl_Linux.cpp'
         ],
         'cflags': ['<!@(pkg-config --cflags --libs gnome-keyring-1)'], #call pkg-config to get the cflags
         'libraries': ['<!@(pkg-config --libs-only-l gnome-keyring-1)'], #call pkg-config to get the libraries
@@ -38,7 +38,19 @@
         'cflags_cc!': [ '-fno-exceptions' ]
       }]
     ],
-      }
+    }, 
+    {
+    'target_name': 'webinos_wrt',
+    'type': 'none',
+    'toolsets': ['host'],
+    'copies': [
+      {
+        'files': [
+          'build/Release/keystore.node',
+        ],
+        'destination': 'node_modules/',
+      }],
+    }, # end webinos_wrt
   ] # end targets
 }
 

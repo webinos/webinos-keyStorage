@@ -13,5 +13,8 @@
   [ { "type" : "git",
       "url"  : "https://github.com/webinos/webinos-keyStorage.git"
     }
-  ] 
+  ]
+, "scripts": {
+  "install": "node-gyp configure build"
+  }
 }
