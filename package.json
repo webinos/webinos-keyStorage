@@ -1,20 +1,41 @@
-{ "name": "webinos-keyStorage"
-, "description": "An interface to the native password/keystorage interface. Currently works for Linux and Mac OS X"
-, "version": "0.0.1"
-, "main": "lib/keystore.js"
-, "keywords": ["Gnome keyring","Keychain Services"]
-, "maintainers": [{ "name": "Shamal Faily, Habib Virji"}]
-, "contributors": [{ "name": "Shamal Faily, Habib Virji"}]
-, "bugs":
-  { "email": "shamal.faily@cs.ox.ac.uk, habib.virji@samsung.com"
-  , "url": "http://www.cs.ox.ac.uk/people/shamal.faily"
-  }
-, "repositories": 
-  [ { "type" : "git",
-      "url"  : "https://github.com/webinos/webinos-keyStorage.git"
+{
+  "name": "webinos-keyStorage",
+  "description": "An interface to the native password/keystorage interface. Currently works for Linux and Mac OS X",
+  "version": "0.0.1",
+  "main": "lib/keystore.js",
+  "keywords": [
+    "Gnome keyring",
+    "Keychain Services"
+  ],
+  "maintainers": [
+    {
+      "name": "Shamal Faily, Habib Virji"
     }
-  ]
-, "scripts": {
-  "install": "node-gyp configure build"
-  }
+  ],
+  "contributors": [
+    {
+      "name": "Shamal Faily, Habib Virji"
+    }
+  ],
+  "bugs": {
+    "email": "shamal.faily@cs.ox.ac.uk, habib.virji@samsung.com",
+    "url": "http://www.cs.ox.ac.uk/people/shamal.faily"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/webinos/webinos-keyStorage.git"
+    }
+  ],
+  "scripts": {
+    "install": "node-gyp configure build"
+  },
+  "readme": "webinos-keyStorage\n==================\n\nKeyStorage in Linux using Gnome-Keyring and CoreFoundation in Darwin platform.\n",
+  "readmeFilename": "README.md",
+  "_id": "webinos-keyStorage@0.0.1",
+  "dist": {
+    "shasum": "8579c78b8d852c39e83243aa2ee6fdac7b25df3c"
+  },
+  "_resolved": "git://github.com/webinos/webinos-keyStorage.git#7564e5ab5e4c4534f21b57ca7b358b4816f14f0c",
+  "_from": "webinos-keyStorage@git://github.com/webinos/webinos-keyStorage.git"
 }

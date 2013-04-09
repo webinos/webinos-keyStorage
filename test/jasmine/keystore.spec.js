@@ -16,13 +16,13 @@
  * Copyright 2012 - 2013 Samsung Electronics (UK) Ltd
  * AUTHOR: Habib Virji (habib.virji@samsung.com)
  ********************************************************************************/
+var secretKey = "mySecret";
+var secret = "987654321";
 // These functions are related to checking native code functionality
 describe("Manager.Keystore", function() {
     if (require("os").platform() === "linux") {
         try {
             var ks = require('keystore');
-            var secretKey = "mySecret";
-            var secret = "987654321";
             it('add and return a simple secret', function() {
                 ks.put(secretKey,secret);
                 var secOut = ks.get(secretKey);
@@ -46,16 +46,14 @@ describe("Manager.Keystore", function() {
 // KeyStore JavaScript calls
 describe("KeyStore JS tests", function() {
     var KeyStore= require("../../lib/keystore.js");
-    var WebinosPath = require("../../../../util/lib/webinosPath");
+    var WebinosPath = require("webinos-utilities").webinosPath;
     KeyStoreInstance = new KeyStore("Pzp", WebinosPath.webinosPath());
-    console.log(WebinosPath.webinosPath());
-    var secretKey = "webinosPzp";
     var checkKey;
     var RSA_START       = "-----BEGIN RSA PRIVATE KEY-----";
     var RSA_END         = "-----END RSA PRIVATE KEY-----";
 
     it("generate and store key", function() {
-        KeyStoreInstance.generateStoreKey("Pzp", secretKey, function(status, key){
+        KeyStoreInstance.storeKey(secretKey, secret, function(status, key){
             checkKey = key;
             expect(status).toBeTruthy();
             expect(key).not.toBeNull();
@@ -110,16 +108,16 @@ describe("KeyStore Exception JS tests", function() {
     });
 
     it("check exception while storing generated key", function() {
-        KeyStoreInstance.generateStoreKey("Pzp", null, function(statusG, errMsg){           
+        KeyStoreInstance.storeKey(null, secret, function(){
         });
     });
     it("check exception while fetching key with empty secretKey", function() {
-        KeyStoreInstance.fetchKey("", function(statusF, errMsg){
+        KeyStoreInstance.fetchKey("", function(){
 
         });
     });
     it("check exception while deleting key", function() {
-        KeyStoreInstance.deleteKey(undefined, function(statusD, errMsg){
+        KeyStoreInstance.deleteKey(undefined, function(){
         });
     });
 });

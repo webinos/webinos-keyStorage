@@ -1,0 +1,10 @@
+{
+  "name": "webinos-keyStorage",
+  "description": "Webinos Key Storage stores private key. By default it stores private key using gnome-keyring in Linux and core-utils in Mac. In Android and Windows by default it stores in fileSystem. Change option below to change keyStorage mechanism in Linux or MAC. For other platforms this option is currently not supported ",
+  "params": {
+     "storageType": "fs"
+  },
+  "validType": {
+     "storageType": ["fs", "keyStorage"]
+  }
+}
