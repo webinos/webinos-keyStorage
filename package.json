@@ -27,8 +27,19 @@
       "url": "https://github.com/webinos/webinos-keyStorage.git"
     }
   ],
+  "dependencies": {
+    "webinos-utilities": "git://github.com/webinos/webinos-utilities.git"
+  },
+  "devDependencies" : {
+    "jasmine-node" : "1.x.x"
+  },
+  "engines":
+  { "node": ">= 0.6.0",
+    "npm": ">= 1.1.17"
+  },
   "scripts": {
-    "install": "node-gyp configure build"
+    "install": "node-gyp configure build",
+    "test" : "jasmine-node ./test/jasmine"
   },
   "readme": "webinos-keyStorage\n==================\n\nKeyStorage in Linux using Gnome-Keyring and CoreFoundation in Darwin platform.\n",
   "readmeFilename": "README.md",
