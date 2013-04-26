@@ -31,6 +31,7 @@
     "webinos-utilities": "git://github.com/webinos/webinos-utilities.git"
   },
   "devDependencies" : {
+    "webinos-utilities": "git://github.com/webinos/webinos-utilities.git",
     "jasmine-node" : "1.x.x"
   },
   "engines":

@@ -51,7 +51,10 @@ describe("KeyStore JS tests", function() {
     var checkKey;
     var RSA_START       = "-----BEGIN RSA PRIVATE KEY-----";
     var RSA_END         = "-----END RSA PRIVATE KEY-----";
-
+    if(!require("fs").existsSync(WebinosPath.webinosPath())) {
+      require("fs").mkdirSync(WebinosPath.webinosPath());
+      require("fs").mkdirSync(WebinosPath.webinosPath()+"/keys");
+    }
     it("generate and store key", function() {
         KeyStoreInstance.storeKey(secretKey, secret, function(status, key){
             checkKey = key;
