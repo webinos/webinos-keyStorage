@@ -22,6 +22,8 @@ var secret = "987654321";
 describe("Manager.Keystore", function() {
     if (require("os").platform() === "linux") {
         try {
+            var config = require("../../config.json");
+            if (config.params.storageType ==="keyStorage"){
             var ks = require('keystore');
             it('add and return a simple secret', function() {
                 ks.put(secretKey,secret);
@@ -37,6 +39,7 @@ describe("Manager.Keystore", function() {
                 var wrongSecretKey = "noSecret";
                 expect(function(){ks.delete(wrongSecretKey);}).toThrow();
             });
+            }
         } catch(err) {
             console.log("keystore is not loaded");
         }
