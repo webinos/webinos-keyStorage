@@ -46,7 +46,7 @@
     'copies': [
       {
         'files': [
-          'build/Release/keystore.node',
+          '<(PRODUCT_DIR)/keystore.node',
         ],
         'destination': 'node_modules/',
       }],
