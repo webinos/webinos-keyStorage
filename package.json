@@ -1,7 +1,7 @@
 {
   "name": "webinos-keyStorage",
   "description": "An interface to the native password/keystorage interface. Currently works for Linux and Mac OS X",
-  "version": "0.0.1",
+  "version": "0.8.0",
   "main": "lib/keystore.js",
   "keywords": [
     "Gnome keyring",
@@ -21,12 +21,10 @@
     "email": "shamal.faily@cs.ox.ac.uk, habib.virji@samsung.com",
     "url": "http://www.cs.ox.ac.uk/people/shamal.faily"
   },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/webinos/webinos-keyStorage.git"
-    }
-  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webinos/webinos-keyStorage.git"
+  },
   "dependencies": {
     "webinos-utilities": "git://github.com/webinos/webinos-utilities.git"
   },
