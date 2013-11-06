@@ -26,10 +26,10 @@
     "url": "https://github.com/webinos/webinos-keyStorage.git"
   },
   "dependencies": {
-    "webinos-utilities": "git://github.com/webinos/webinos-utilities.git"
+    "webinos-utilities": "git://github.com/webinos/webinos-utilities"
   },
   "devDependencies" : {
-    "webinos-utilities": "git://github.com/webinos/webinos-utilities.git",
+    "webinos-utilities": "git://github.com/webinos/webinos-utilities",
     "jasmine-node" : "1.x.x"
   },
   "engines":
